@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+<!--
+	Spectral by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->						
+<html>
+
+		<head>
+		<title>Elements - Spectral by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="index.html">Lumin</a></h1>
+						<nav id="nav">
+							<ul>
+								<li class="special">
+									<a href="#menu" class="menuToggle"><span>Menu</span></a>
+									<div id="menu">
+										<ul>
+											<li><a href="index.html">Lumin</a></li>
+											<li><a href="generic.html">Programación</a></li>
+											<li><a href="elements.html">Diseño 3D</a></li
+										</ul>
+									</div>
+								</li>
+							</ul>
+						</nav>
+					</header>
+
+
+				<!-- Main -->
+					<article id="main">
+						<header>
+							<h2>Lumin</h2>
+							<p> ¿Cómo logramos que funcione la lampara? </p>
+						</header>
+						<section class="wrapper style5">
+							<div class="inner">
+
+							<h3>Algoritmo</h3>
+							    <section class="spotlight">
+						            <div class="image"><img src="images/5.jpg" alt="" /></div><div class="content">
+								<h2>El algoritmo se realizo para demostrar la funcionalidad de la lampara. </p>
+							  </div>
+						
+
+						</section>	  
+
+								<section>
+									<h5>Programación</h5>
+									<blockquote>Realizamos el siguiente código de programación para que la lampara Lumin pueda encender en 
+										diferentes colores según la distacia que el sensor detecte de algún objeto, además de reproducir 
+										música cómo funciones. También en esta sección vas a 
+							encontrar los.</blockquote>
+									<h5>Código de Programación</h5>
+									<pre><code>i = 
+					#include <Adafruit_NeoPixel.h>
+				        #include "SoftwareSerial.h"
+					#include "DFRobotDFPlayerMini.h"
+                                        #define NEO_PIN 2 // Pin al que está conectado el Neopixel
+					#define NUMPIXELS 24 // Número de Neopixels que estás usando
+                                        #define TRIG_PIN 3 // Pin Trig del sensor de ultrasonido HC-SR04
+					#define ECHO_PIN 4 // Pin Echo del sensor de ultrasonido HC-SR04
+					#define RX_PIN 10 // Pin RX del módulo DFPlayer
+					#define TX_PIN 11 // Pin TX del módulo DFPlayer
+					#define BUTTON_PIN 5 // Pin del pulsador
+					#define STOP_PIN 6 // Pin para detener el DFPlayer con resistencia pull-up
+					Adafruit_NeoPixel pixels(NUMPIXELS, NEO_PIN, NEO_GRB + NEO_KHZ800);
+					uint32_t currentColor = pixels.Color(0, 0, 0); // Inicialmente apagado
+					SoftwareSerial mySoftwareSerial(RX_PIN, TX_PIN); // RX, TX
+					DFRobotDFPlayerMini myDFPlayer;
+					int lastButtonState = HIGH;  // Estado anterior del botón, inicializado en HIGH porque INPUT_PULLUP
+					bool isPlaying = false;  // Estado inicial: pausado
+					void setup() {
+					pixels.begin(); // Inicializa el objeto Neopixel
+					pinMode(TRIG_PIN, OUTPUT); // Configura el pin TRIG_PIN como salida
+					pinMode(ECHO_PIN, INPUT); // Configura el pin ECHO_PIN como entrada
+					pinMode(BUTTON_PIN, INPUT_PULLUP); // Configura el pin del pulsador como entrada con resistencia pull-up
+					pinMode(STOP_PIN, INPUT_PULLUP); // Configura el pin para detener el DFPlayer como entrada con resistencia pull-up			
+					Serial.begin(9600); // Inicializa la comunicación serial con velocidad de 9600 baudios
+					mySoftwareSerial.begin(9600); // Inicializa la comunicación serial del DFPlayer
+					if (!myDFPlayer.begin(mySoftwareSerial)) {  // Inicializa el DFPlayer Mini
+				        Serial.println(F("Error al iniciar DFPlayer"));
+				        while(true);
+					}										
+			         	myDFPlayer.volume(30); // Configura el volumen del DFPlayer (ajusta según tus necesidades)
+					}
+					void loop() {
+					int buttonState = digitalRead(BUTTON_PIN);
+					int stopButtonState = digitalRead(STOP_PIN);
+					long duration, distance; // Variables para almacenar la duración del pulso y la distancia  
+					digitalWrite(TRIG_PIN, LOW); // Establece el pin TRIG_PIN en bajo
+					delayMicroseconds(2); // Espera 2 microsegundos
+					digitalWrite(TRIG_PIN, HIGH); // Establece el pin TRIG_PIN en alto
+					delayMicroseconds(10); // Espera 10 microsegundos
+					digitalWrite(TRIG_PIN, LOW); // Establece el pin TRIG_PIN en bajo
+					duration = pulseIn(ECHO_PIN, HIGH); // Mide la duración del pulso en el pin ECHO_PIN
+					distance = (duration / 2) / 29.1; // Calcula la distancia en centímetros utilizando la fórmula d = (t / 2) / 29.1
+					// Actualiza el color del Neopixel según la distancia medida
+					if (distance >= 0 && distance <= 10) x
+				        // Color naranja
+					currentColor = pixels.Color(255, 100, 0);
+					} else if (distance > 10 && distance <= 20) {
+					// Color celeste
+					currentColor = pixels.Color(150, 50, 10);  
+					} else if (distance > 20 && distance <= 30) {
+					// Color celeste
+					currentColor = pixels.Color(50, 50, 55);
+					} else if (distance > 30 && distance <= 40) {
+					// Color azul
+					currentColor = pixels.Color(0, 0, 255);
+					} else if (distance > 40 && distance <= 50) {
+				        // Apaga el Neopixel
+					currentColor = pixels.Color(0, 0, 0);
+					}
+					pixels.fill(currentColor); // Establece el color configurado
+					pixels.show(); // Muestra el color configurado
+					// Verifica si el botón ha sido presionado
+					if (buttonState == LOW && lastButtonState == HIGH) {
+					// Alterna el estado de reproducción
+					if (!isPlaying) {
+					myDFPlayer.play(1); // Reproduce la pista específica "0001.mp3"
+				        isPlaying = true;
+					} else {
+					myDFPlayer.stop(); // Pausa la reproducción
+					isPlaying = false;
+					}
+				        // Espera a que se suelte el botón para evitar rebotes y múltiples activaciones
+					while (digitalRead(BUTTON_PIN) == LOW) {
+					delay(10);
+					}
+					}
+					// Verifica si el botón de parada ha sido presionado
+					if (stopButtonState == LOW) {
+					myDFPlayer.stop(); // Detiene la reproducción
+					isPlaying = false;
+					while (digitalRead(STOP_PIN) == LOW) {
+					delay(10); // Espera a que se suelte el botón de parada para evitar rebotes y múltiples activaciones
+					}
+					}
+					// Guarda el estado actual del botón
+					lastButtonState = buttonState;
+					delay(50); // Pequeña demora para evitar rebote
+					}
+
+								</section>
+					
+
+								<section>
+									<h4>Tabla</h4>
+									<h5>De Costos</h5>
+									<div class="table-wrapper">
+										<table>
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Price</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Arduino Nano</td>
+													<td>Se eligio el Arduino Nano, por el tamaño de la lampara.</td>
+													<td>16.70</td>
+												</tr>
+												<tr>
+													<td>Neo Pixel</td>
+													<td>24 Led WS2812.Porque brilla más que 1 led normal</td>
+													<td>15.00</td>
+												</tr>
+												<tr>
+													<td>Sensor urtrasonido</td>
+													<td>Se eligio el sensor ultrasonico HC-SR04 para poder controlar el nanopixel sin tocar la lampara</td>
+													<td>6.20</td>
+												</tr>
+												<tr>
+													<td>Pulsador</td>
+													<td>Se eligio el Pulsador, Uno para darle PLAY al audio ¨Le da una una vuelta a la camción y se apaga¨
+													y otro para para la música.El precio por cada pulsador es 0.30</td>
+													<td>0.30</td>
+												</tr>
+												<tr>
+													<td>Parlante/Bocina</td>
+													<td>Se eligio el Parlante/Bocina para escuchar la música.</td>
+													<td>5.0</td>
+												</tr>
+												<tr>
+													<td>Potenciómetro b5k</td>
+													<td>Se eligio el Potenciómetro b5k para regular el volumen del parlante.</td>
+													<td>0.80</td>
+												</tr>
+												<tr>
+													<td>DF Player ¨MP3¨</td>
+													<td>Se eligio el df player ¨MP3¨ para lograr leer los archivos de audio y controlar el altavoz .</td>
+													<td>9.30</td>
+												</tr>
+											
+											</tbody>
+											<tfoot>
+												<tr>
+													<td colspan="2"></td>
+													<td>53.3</td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+
+								
+								</section>
+
+								
+
+						<section>
+									<h4>Tinkercad</h4>
+									<h5>Circuito y componentes usados</h5>
+									<div class="box alt">
+										<div class="row gtr-50 gtr-uniform">
+											<div class="col-12"><span class="image fit"><img src="images/db245a8b-baa1-4025-8a0e-a87738f7cd17.jpg" alt="" /></span></div>
+											<div class="col-4"><span class="image fit"><img src="images/Arduino nano.jpg" alt="" /></span></div>
+											<div class="col-4"><span class="image fit"><img src="images/Bocina 3W.jpg" alt="" /></span></div>
+											<div class="col-4"><span class="image fit"><img src="images/Cables Dupont.jpg" alt="" /></span></div>
+											<div class="col-4"><span class="image fit"><img src="images/Protoboard.jpg" alt="" /></span></div>
+											<div class="col-4"><span class="image fit"><img src="images/DF player mini.jpg" alt="" /></span></div>
+											<div class="col-4"><span class="image fit"><img src="images/Neopixel 24.jpg" alt="" /></span></div>
+											<div class="col-4"><span class="image fit"><img src="images/Potenciómetro mono lineal.jpg" alt="" /></span></div>
+											<div class="col-4"><span class="image fit"><img src="images/Pulsador.jpg" alt="" /></span></div>
+											<div class="col-4"><span class="image fit"><img src="images/Sensor de ultrasonido.jpg" alt="" /></span></div>
+									</div>
+									<h5>Proceso de trabajo</h5>
+									
+								</section>
+<section id="two">
+						<section class="spotlight">
+							<div class="image"><img src="images/IMG_7487.jpeg" alt="" /></div><div class="content">
+								<h2>Componentes usados</h2>
+								<p>Los componentes usados en el circuito fueron: DF player mini, Potenciómetro mono lineal, Protoboard, Neopixel 24, Bocina 3W,
+								Cables Dupont, Pulsador, Sensor de ultrasonido, Arduino nano.</p>
+							</div>
+						</section>
+	                                        <section class="spotlight">
+							<div class="image"><img src="images/d47a7ed7-0f3b-4b3e-b98a-bc37aa3d7e57.jpg" alt="" /></div><div class="content">
+								<h2>Funcionamiento</h2>
+								<p>Se realisarón las pruebas del funcionamiento del circuito para lograr prender las luces con el sensor, 
+								Colocar y reproducir la música, encenderla y apagarla, entre otras.</p>
+							</div>
+						</section>
+					</section>
+						
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
